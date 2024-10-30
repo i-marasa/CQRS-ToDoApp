@@ -1,7 +1,6 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ToDoApp.Application.Features.ToDoItems.Commands;
 using ToDoApp.Application.Features.ToDoItems.Queries;
 using ToDoApp.Domain.Entities;
@@ -10,6 +9,7 @@ namespace ToDoApp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ToDoItemsController : ControllerBase
     {
         private readonly IMediator _mediator;
