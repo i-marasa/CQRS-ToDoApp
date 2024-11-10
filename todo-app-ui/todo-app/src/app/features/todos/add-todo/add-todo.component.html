@@ -1,0 +1,28 @@
+<div class="container">
+    <h2>Add Todo</h2>
+    <form [formGroup]="todoForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input id="title" type="text" class="form-control" formControlName="title" />
+        <div *ngIf="todoForm.get('title')?.invalid && todoForm.get('title')?.touched" class="text-danger">
+          Title is required and must be at least 3 characters long.
+        </div>
+      </div>
+  
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" class="form-control" formControlName="description"></textarea>
+        <div *ngIf="todoForm.get('description')?.invalid && todoForm.get('description')?.touched" class="text-danger">
+          Description is required and must be at least 5 characters long.
+        </div>
+      </div>
+  
+      <div class="form-check mb-3">
+        <input id="completed" type="checkbox" class="form-check-input" formControlName="completed" />
+        <label for="completed" class="form-check-label">Completed</label>
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="todoForm.invalid">Add Todo</button>
+    </form>
+  </div>
+  

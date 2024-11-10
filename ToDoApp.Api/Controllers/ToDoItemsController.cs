@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Application.Features.ToDoItems.Commands;
@@ -9,7 +10,7 @@ namespace ToDoApp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ToDoItemsController : ControllerBase
     {
         private readonly IMediator _mediator;

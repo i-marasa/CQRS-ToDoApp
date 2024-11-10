@@ -70,22 +70,28 @@ namespace ToDoApp.Application.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(double.Parse(_configuration["Jwt:ExpireMinutes"])),
-                signingCredentials: creds);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(5),
+                SigningCredentials = credentials,
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"],
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenCreated = tokenHandler.CreateToken(tokenDescriptor);
 
             return new AuthResponse
             {
                 IsAuthenticated = true,
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = token.ValidTo
+                Token = tokenHandler.WriteToken(tokenCreated),
+                Expiration = DateTime.Now.AddDays(10)
             };
+
         }
     }
 }
